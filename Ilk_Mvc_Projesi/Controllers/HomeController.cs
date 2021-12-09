@@ -21,10 +21,10 @@ namespace Ilk_Mvc_Projesi.Controllers
         public IActionResult Index()
         {
             //asşdalskdlsa
-
+            var data = UrunManager.GetUrunler();
 
             _logger.LogInformation("falan filan");
-            return View();
+            return View(data);
         }
 
         public IActionResult Privacy()
