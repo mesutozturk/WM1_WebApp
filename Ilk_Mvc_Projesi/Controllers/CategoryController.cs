@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Ilk_Mvc_Projesi.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Ilk_Mvc_Projesi.Controllers
 {
@@ -6,7 +8,12 @@ namespace Ilk_Mvc_Projesi.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            var context = new NorthwindContext();
+            var data = context.Categories
+                .OrderBy(x=>x.CategoryName)
+                .ToList();
+            //resharper
+            return View(data);
         }
     }
 }
