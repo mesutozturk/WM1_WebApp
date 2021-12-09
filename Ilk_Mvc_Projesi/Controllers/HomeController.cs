@@ -20,6 +20,10 @@ namespace Ilk_Mvc_Projesi.Controllers
 
         public IActionResult Index()
         {
+            //asşdalskdlsa
+
+
+            _logger.LogInformation("falan filan");
             return View();
         }
 
