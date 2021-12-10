@@ -97,5 +97,47 @@ namespace Ilk_Mvc_Projesi.Controllers
             TempData["silinen_kategori"] = silinecek.CategoryName;
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult Update(int? id)
+        {
+            var category = _context.Categories.FirstOrDefault(x => x.CategoryId == id);
+            if (category == null) return RedirectToAction(nameof(Index));
+
+            var model = new CategoryViewModel()
+            {
+                CategoryId = category.CategoryId,
+                CategoryName = category.CategoryName,
+                Description = category.Description
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Update(CategoryViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var category = _context.Categories.FirstOrDefault(x => x.CategoryId == model.CategoryId);
+
+            try
+            {
+                category.CategoryName = model.CategoryName;
+                category.Description = model.Description;
+
+                _context.Categories.Update(category);
+
+                _context.SaveChanges();
+                return RedirectToAction("Detail", new { id = category.CategoryId });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"{model.CategoryName} güncellenirken bir hata oluştu. Tekrar deneyiniz");
+                return View(model);
+            }
+        }
     }
 }
