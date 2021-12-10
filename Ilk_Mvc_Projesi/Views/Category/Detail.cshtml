@@ -3,6 +3,7 @@
 <h1>@Model.CategoryName</h1>
 <h3>@Model.Description</h3>
 <a asp-action="Create" asp-controller="Category" class="btn btn-info">Yeni Kategori</a>
+<a asp-action="Delete" asp-controller="Category" asp-route-categoryId=@Model.CategoryId class="btn btn-danger">Kategoriyi Sil</a>
 
 <div class="row">
     <div class="col-9">

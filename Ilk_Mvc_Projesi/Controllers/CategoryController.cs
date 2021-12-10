@@ -64,7 +64,7 @@ namespace Ilk_Mvc_Projesi.Controllers
 
             var category = new Category()
             {
-                CategoryId = 1,//hata versin diye yazdık
+                //CategoryId = 1,//hata versin diye yazdık
                 CategoryName = model.CategoryName,
                 Description = model.Description
             };
@@ -79,7 +79,23 @@ namespace Ilk_Mvc_Projesi.Controllers
                 ModelState.AddModelError(string.Empty, $"{model.CategoryName} eklenirken bir hata oluştu. Tekrar deneyiniz");
                 return View(model);
             }
-            return View();
+        }
+
+        public IActionResult Delete(int? categoryId)
+        {
+            var silinecek = _context.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
+            try
+            {
+                _context.Categories.Remove(silinecek);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction(nameof(Detail), new { id = categoryId });
+            }
+
+            TempData["silinen_kategori"] = silinecek.CategoryName;
+            return RedirectToAction(nameof(Index));
         }
     }
 }
