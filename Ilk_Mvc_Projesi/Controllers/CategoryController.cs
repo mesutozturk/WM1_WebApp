@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Ilk_Mvc_Projesi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
@@ -15,6 +16,7 @@ namespace Ilk_Mvc_Projesi.Controllers
             _context = context;
         }
 
+        //[HttpGet]
         public IActionResult Index()
         {
             var data = _context.Categories
@@ -48,6 +50,27 @@ namespace Ilk_Mvc_Projesi.Controllers
 
         public IActionResult Create()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Category model)
+        {
+            var category = new Category()
+            {
+                CategoryName = model.CategoryName,
+                Description = model.Description
+            };
+            _context.Categories.Add(category);
+            try
+            {
+                _context.SaveChanges();
+                return RedirectToAction("Detail", new { id = category.CategoryId });
+            }
+            catch (Exception ex)
+            {
+                
+            }
             return View();
         }
     }
