@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Ilk_Mvc_Projesi.Models;
+using Ilk_Mvc_Projesi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.EntityFrameworkCore;
@@ -54,10 +55,16 @@ namespace Ilk_Mvc_Projesi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Category model)
+        public IActionResult Create(CategoryViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var category = new Category()
             {
+                CategoryId = 1,//hata versin diye yazdık
                 CategoryName = model.CategoryName,
                 Description = model.Description
             };
@@ -69,7 +76,8 @@ namespace Ilk_Mvc_Projesi.Controllers
             }
             catch (Exception ex)
             {
-                
+                ModelState.AddModelError(string.Empty, $"{model.CategoryName} eklenirken bir hata oluştu. Tekrar deneyiniz");
+                return View(model);
             }
             return View();
         }
