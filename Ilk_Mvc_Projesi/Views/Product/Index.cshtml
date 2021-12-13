@@ -1,0 +1,33 @@
+﻿@model List<Product>
+
+<div class="row">
+    <div class="col">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Kategori Adı</th>
+                    <th>Ürün Adı</th>
+                    <th>Fiyat</th>
+                    <th>Tedarikçisi</th>
+                    <th>Detay</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Category.CategoryName</td>
+                        <td>@item.ProductName</td>
+                        <td>@($"{item.UnitPrice:c2}")</td>
+                        <td>@item.Supplier.CompanyName</td>
+                        <td>
+                            <a asp-controller="ProductController" asp-action="Detail" asp-route-id="@item.ProductId">
+                                Detay
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
