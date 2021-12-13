@@ -30,17 +30,27 @@
             </tbody>
         </table>
         <input type="button" value="Önceki Sayfa" class="btn btn-success" id="btn-onceki" />
-        @ViewBag.Page
+        @ViewBag.Page/@ViewBag.Limit
         <input type="button" value="Sonraki Sayfa" class="btn btn-success" id="btn-sonraki" />
     </div>
 </div>
 @section Scripts{
 <script>
+    var limit = @ViewBag.Limit;
+    var page = @ViewBag.Page;
     $("#btn-onceki").click(function() {
-        console.log("önceki");
+        if (page > 1) {
+            page -= 1;
+            var url = "product/index?page=" + page;
+            var url2 = '@Url.Action("Index","Product",new { page=ViewBag.Page-1 })';
+            window.location.href = url2;
+        }
     });
     $("#btn-sonraki").click(function() {
-        console.log("sonraki");
+        if (page<limit) {
+            var url2 = '@Url.Action("Index","Product",new { page=ViewBag.Page+1 })';
+            window.location.href = url2;
+        }
     });
 </script>
 }

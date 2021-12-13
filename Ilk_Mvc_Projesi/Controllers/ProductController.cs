@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Ilk_Mvc_Projesi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,7 @@ namespace Ilk_Mvc_Projesi.Controllers
             //ViewBag.Suppliers = _dbContext.Suppliers.OrderBy(x => x.CompanyName).ToList();
 
             ViewBag.Page = page.GetValueOrDefault(1);
+            ViewBag.Limit = (int)Math.Ceiling(_dbContext.Products.Count() / (double)_pageSize);
 
             return View(model);
         }
