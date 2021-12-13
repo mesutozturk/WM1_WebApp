@@ -1,4 +1,6 @@
-﻿namespace Ilk_Mvc_Projesi.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Ilk_Mvc_Projesi.ViewModels
 {
     public class ProductViewModel
     {
@@ -8,6 +10,7 @@
         public string CategoryName { get; set; }
         public int? SupplierId { get; set; }
         public string CompanyName { get; set; }
+        [Range(0, 999999999,ErrorMessage = "Ürün fiyatı 0-999999999 arasında olmalıdır")]
         public decimal? UnitPrice { get; set; }
     }
 }
