@@ -82,29 +82,8 @@ namespace Ilk_Mvc_Projesi.Controllers
                 SupplierId = data.SupplierId
             };
 
-            var categories = _dbContext.Categories.OrderBy(x => x.CategoryName).ToList();
-            var suppliers = _dbContext.Suppliers.OrderBy(x => x.CompanyName).ToList();
-
-            var categoryList = new List<SelectListItem>
-            {
-                new SelectListItem("Kategori Yok", null)
-            };
-            foreach (var category in categories)
-            {
-                categoryList.Add(new SelectListItem(category.CategoryName, category.CategoryId.ToString()));
-            }
-
-            var supplierList = new List<SelectListItem>()
-            {
-                new SelectListItem("Tedarikci Yok", null)
-            };
-            foreach (var supplier in suppliers)
-            {
-                supplierList.Add(new SelectListItem(supplier.CompanyName, supplier.SupplierId.ToString()));
-            }
-
-            ViewBag.CategoryList = categoryList;
-            ViewBag.SupplierList = supplierList;
+            ViewBag.CategoryList = GetCategoryList();
+            ViewBag.SupplierList = GetSupplierList();
 
             return View(model);
         }
@@ -114,6 +93,8 @@ namespace Ilk_Mvc_Projesi.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.CategoryList = GetCategoryList();
+                ViewBag.SupplierList = GetSupplierList();
                 return View(model);
             }
 
@@ -134,9 +115,43 @@ namespace Ilk_Mvc_Projesi.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty,ex.Message);
+                ModelState.AddModelError(string.Empty, ex.Message);
+                ViewBag.CategoryList = GetCategoryList();
+                ViewBag.SupplierList = GetSupplierList();
                 return View(model);
             }
+        }
+
+
+        private List<SelectListItem> GetCategoryList()
+        {
+            var categories = _dbContext.Categories.OrderBy(x => x.CategoryName).ToList();
+            var categoryList = new List<SelectListItem>
+            {
+                new SelectListItem("Kategori Yok", null)
+            };
+            foreach (var category in categories)
+            {
+                categoryList.Add(new SelectListItem(category.CategoryName, category.CategoryId.ToString()));
+            }
+
+            return categoryList;
+        }
+
+        private List<SelectListItem> GetSupplierList()
+        {
+            var suppliers = _dbContext.Suppliers.OrderBy(x => x.CompanyName).ToList();
+
+            var supplierList = new List<SelectListItem>()
+            {
+                new SelectListItem("Tedarikci Yok", null)
+            };
+            foreach (var supplier in suppliers)
+            {
+                supplierList.Add(new SelectListItem(supplier.CompanyName, supplier.SupplierId.ToString()));
+            }
+
+            return supplierList;
         }
     }
 }
