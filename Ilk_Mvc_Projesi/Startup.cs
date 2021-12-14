@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Ilk_Mvc_Projesi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
