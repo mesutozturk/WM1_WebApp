@@ -24,22 +24,27 @@
                     "categoryName": $("#CategoryName").val(),
                     "description": $("#Description").val()
                 };
-                console.log(model);
+                //console.log(model);
+                var categoryDetailUrl = '@Url.Action("Detail", "Category")';
+                //console.log(categoryDetailUrl);
                 $.ajax({
                     "headers": {
                         "Content-Type": "application/json"
                     },
-                    url: '@Url.Action("AddCategory","CategoryApi")',
+                    url: '@Url.Action("AddCategory", "CategoryApi")',
                     type: "POST",
                     data: JSON.stringify(model),
                     dataType: "json",
                     success: function(response) {
-                        console.log(response);
+                        alert(response.message);
+                        window.location.href = `${categoryDetailUrl}/${response.model.categoryId}`;
+
+                        window.location.href = categoryDetailUrl + '/' + response.model.categoryId;
                     },
-                    error: function (request, status, error) {
+                    error: function(request, status, error) {
                         console.log(request.responseText);
                     }
-                }).fail;
+                });
             });
         })
     </script>
