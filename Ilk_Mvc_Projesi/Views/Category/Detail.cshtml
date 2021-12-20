@@ -35,6 +35,7 @@
                     <th>Siparişleri</th>
                     <th>Hacim</th>
                     <th>Detay</th>
+                    <th>Sil</th>
                 </tr>
             </thead>
             <tbody id="tbl-body">
@@ -48,9 +49,12 @@
                         <td>@item.OrderDetails.Sum(x=>x.UnitPrice*x.Quantity*(decimal)(1-x.Discount))</td>
                         <td>
                             <a class="btn btn-block btn-info"
-                           asp-controller="Product" asp-action="Detail" asp-route-id="@item.CategoryId">
+                               asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId">
                                 Detay
                             </a>
+                        </td>
+                        <td>
+                            <input type="button" class="btn btn-danger btn-delete" value="SİL!" data-toggle="modal" data-target="#confirm-delete" data-id="@item.ProductId" />
                         </td>
                     </tr>
                 }
@@ -59,64 +63,112 @@
     </div>
 </div>
 
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Silme Onayı</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Ürün silinecektir. Bu işlemin geri dönüşü yoktur!</p>
+                <p>Emin misiniz?</p>
+                <p class="debug-url"></p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Vazgeç</button>
+                <a class="btn btn-danger btn-ok">SİL</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts
 {
-<script>
-    $("#cb-urunekle").click(function() {
-        $("#frm-add").toggle(500);
-    });
-    $("#frm-add").submit(function(e) {
-        e.preventDefault();
-
-        var model = {
-            productName: $("#in-urunadi").val(),
-            unitPrice: $("#in-fiyat").val(),
-            categoryId: $("#CategoryId").val()
-        };
-        $.ajax({
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            url: '@Url.Action("Add", "ProductApi")',
-            type: "POST",
-            data: JSON.stringify(model),
-            dataType: "json",
-            success: function(response) {
-                //alert(response.message);
-                console.log(response);
-                var model = response.model;
-
-                var tr = document.createElement("tr");
-                var td1 = document.createElement("td");
-                var td2 = document.createElement("td");
-                var td3 = document.createElement("td");
-                var td4 = document.createElement("td");
-                var td5 = document.createElement("td");
-                var td6 = document.createElement("td");
-                //var alink = document.createElement("a");
-
-                $(td1).html(model.productName);
-                $(td2).html(model.unitPrice);
-                $(td3).html("@Model.CategoryName");
-                $(td4).html("0");
-                $(td5).html("0");
-
-                var detailUrl = '@Url.Action("Detail", "Product")';
-                 $("<a></a>")
-                    .attr("href", `${detailUrl}/${model.productId}`)
-                    .addClass("btn btn-block btn-info")
-                    .html("Detay").appendTo(td6);
-
-                //$(td6).append(alink[0]);
-
-                $(tr).append(td1).append(td2).append(td3).append(td4).append(td5).append(td6).appendTo("#tbl-body");
-
-
-            },
-            error: function(request, status, error) {
-                console.log(request.responseText);
-            }
+    <script>
+        var productId = 0;
+        $('.btn-delete').click(function() {
+            productId = $(this).attr("data-id");
         });
-    });
-</script>
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').on('click', urunSil);
+        });
+
+        function urunSil() {
+            console.log(productId);
+            $.ajax({
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                url: '@Url.Action("Delete", "ProductApi")'+'/'+productId,
+                type: "POST",
+                dataType: "json",
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(request, status, error) {
+                    console.log(request.responseText);
+                }
+            });
+        }
+        $("#cb-urunekle").click(function() {
+            $("#frm-add").toggle(500);
+        });
+        $("#frm-add").submit(function(e) {
+            e.preventDefault();
+
+            var model = {
+                productName: $("#in-urunadi").val(),
+                unitPrice: $("#in-fiyat").val(),
+                categoryId: $("#CategoryId").val()
+            };
+            $.ajax({
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                url: '@Url.Action("Add", "ProductApi")',
+                type: "POST",
+                data: JSON.stringify(model),
+                dataType: "json",
+                success: function(response) {
+                    //alert(response.message);
+                    console.log(response);
+                    var model = response.model;
+
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+                    var td3 = document.createElement("td");
+                    var td4 = document.createElement("td");
+                    var td5 = document.createElement("td");
+                    var td6 = document.createElement("td");
+                    //var alink = document.createElement("a");
+
+                    $(td1).html(model.productName);
+                    $(td2).html(model.unitPrice);
+                    $(td3).html("@Model.CategoryName");
+                    $(td4).html("0");
+                    $(td5).html("0");
+
+                    var detailUrl = '@Url.Action("Detail", "Product")';
+                    $("<a></a>")
+                        .attr("href", `${detailUrl}/${model.productId}`)
+                        .addClass("btn btn-block btn-info")
+                        .html("Detay").appendTo(td6);
+
+                    //$(td6).append(alink[0]);
+
+                    $(tr).append(td1).append(td2).append(td3).append(td4).append(td5).append(td6).appendTo("#tbl-body");
+
+
+                },
+                error: function(request, status, error) {
+                    console.log(request.responseText);
+                }
+            });
+        });
+    </script>
 }
