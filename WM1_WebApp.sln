@@ -5,7 +5,15 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ilk_Mvc_Projesi", "Ilk_Mvc_Projesi\Ilk_Mvc_Projesi.csproj", "{C2E1DDDA-0D38-42EA-A1DF-E9A724DD9CFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutKullanimi", "LayoutKullanimi\LayoutKullanimi.csproj", "{E246B2EB-EA15-4059-95E3-23EDE9DE73E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayoutKullanimi", "LayoutKullanimi\LayoutKullanimi.csproj", "{E246B2EB-EA15-4059-95E3-23EDE9DE73E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItServiceApp", "ItServiceApp\ItServiceApp.csproj", "{760A186E-A23F-4140-9198-65018FE4F6F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1", "1", "{ED431599-4AAF-426D-9A57-F379BF376CF5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2", "2", "{725F60C9-1E6A-4275-A657-134087050B36}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3", "3", "{CBDD0F18-0687-4C45-A872-BA3220FBCA56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +29,18 @@ Global
 		{E246B2EB-EA15-4059-95E3-23EDE9DE73E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E246B2EB-EA15-4059-95E3-23EDE9DE73E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E246B2EB-EA15-4059-95E3-23EDE9DE73E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{760A186E-A23F-4140-9198-65018FE4F6F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{760A186E-A23F-4140-9198-65018FE4F6F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{760A186E-A23F-4140-9198-65018FE4F6F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{760A186E-A23F-4140-9198-65018FE4F6F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C2E1DDDA-0D38-42EA-A1DF-E9A724DD9CFA} = {ED431599-4AAF-426D-9A57-F379BF376CF5}
+		{E246B2EB-EA15-4059-95E3-23EDE9DE73E3} = {725F60C9-1E6A-4275-A657-134087050B36}
+		{760A186E-A23F-4140-9198-65018FE4F6F9} = {CBDD0F18-0687-4C45-A872-BA3220FBCA56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {07768F9C-0114-4308-8BBF-02646F67585B}
