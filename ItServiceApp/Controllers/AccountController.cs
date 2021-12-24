@@ -18,7 +18,12 @@ namespace ItServiceApp.Controllers
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IEmailSender _emailSender;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IEmailSender emailSender)
+        public AccountController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            RoleManager<ApplicationRole> roleManager,
+            IEmailSender emailSender
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -110,6 +115,16 @@ namespace ItServiceApp.Controllers
 
             if (result.Succeeded)
             {
+                var user = await _userManager.FindByNameAsync(model.UserName);
+
+                await _emailSender.SendAsync(new EmailMessage()
+                {
+                    Contacts = new string[] { "mesut@mail.com" },
+                    Subject = $"{user.UserName} - Kullanıcı Giriş Yaptı",
+                    Body =
+                        $"{user.Name} {user.Surname} isimli kullanıcı {DateTime.Now:g} itibari ile siteye giriş yapmıştır"
+                });
+
                 return RedirectToAction("Index", "Home");
             }
             else
