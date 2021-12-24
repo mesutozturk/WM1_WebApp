@@ -1,11 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using ItServiceApp.Models.Identity;
+﻿using ItServiceApp.Models.Identity;
 using ItServiceApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR.Protocol;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using ItServiceApp.Models;
 
 namespace ItServiceApp.Controllers
 {
@@ -13,11 +14,27 @@ namespace ItServiceApp.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
+            CheckRoles();
+        }
+
+        private void CheckRoles()
+        {
+            foreach (var roleName in RoleModels.Roles)
+            {
+                if (!_roleManager.RoleExistsAsync(roleName).Result)
+                {
+                    var result = _roleManager.CreateAsync(new ApplicationRole()
+                    {
+                        Name = roleName
+                    }).Result;
+                }
+            }
         }
 
         [HttpGet]
@@ -59,10 +76,10 @@ namespace ItServiceApp.Controllers
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                //kullanıcıya rol atama
+                var count = _userManager.Users.Count();
+                result = await _userManager.AddToRoleAsync(user, count == 1 ? RoleModels.Admin : RoleModels.User);
                 //email onay maili
-                //login sayfasına yönlendirme
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login", "Account");
             }
             else
             {
@@ -84,7 +101,6 @@ namespace ItServiceApp.Controllers
             {
                 return View(model);
             }
-
 
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, true);
 
