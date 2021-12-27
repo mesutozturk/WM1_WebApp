@@ -5,9 +5,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using ItServiceApp.Models;
 using ItServiceApp.Services;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace ItServiceApp.Controllers
 {
@@ -86,8 +89,24 @@ namespace ItServiceApp.Controllers
             if (result.Succeeded)
             {
                 var count = _userManager.Users.Count();
-                result = await _userManager.AddToRoleAsync(user, count == 1 ? RoleModels.Admin : RoleModels.User);
+                result = await _userManager.AddToRoleAsync(user, count == 1 ? RoleModels.Admin : RoleModels.Passive);
                 //email onay maili
+
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
+                    protocol: Request.Scheme);
+
+                var emailMessage = new EmailMessage()
+                {
+                    Contacts = new string[] { user.Email },
+                    Body =
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.",
+                    Subject = "Confirm your email"
+                };
+
+                await _emailSender.SendAsync(emailMessage);
+
                 return RedirectToAction("Login", "Account");
             }
             else
@@ -95,6 +114,31 @@ namespace ItServiceApp.Controllers
                 ModelState.AddModelError(string.Empty, "Bir hata oluştu");
                 return View(model);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{userId}'.");
+            }
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            ViewBag.StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+
+            if (result.Succeeded && _userManager.IsInRoleAsync(user, RoleModels.Passive).Result)
+            {
+                await _userManager.RemoveFromRoleAsync(user, RoleModels.Passive);
+                await _userManager.AddToRoleAsync(user, RoleModels.User);
+            }
+
+            return View();
         }
 
         [HttpGet]
@@ -117,13 +161,13 @@ namespace ItServiceApp.Controllers
             {
                 var user = await _userManager.FindByNameAsync(model.UserName);
 
-                await _emailSender.SendAsync(new EmailMessage()
-                {
-                    Contacts = new string[] { "mesut@mail.com" },
-                    Subject = $"{user.UserName} - Kullanıcı Giriş Yaptı",
-                    Body =
-                        $"{user.Name} {user.Surname} isimli kullanıcı {DateTime.Now:g} itibari ile siteye giriş yapmıştır"
-                });
+                //await _emailSender.SendAsync(new EmailMessage()
+                //{
+                //    Contacts = new string[] { "mesut@mail.com" },
+                //    Subject = $"{user.UserName} - Kullanıcı Giriş Yaptı",
+                //    Body =
+                //        $"{user.Name} {user.Surname} isimli kullanıcı {DateTime.Now:g} itibari ile siteye giriş yapmıştır"
+                //});
 
                 return RedirectToAction("Index", "Home");
             }
