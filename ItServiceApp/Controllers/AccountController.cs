@@ -265,13 +265,14 @@ namespace ItServiceApp.Controllers
             if (result.Succeeded)
             {
                 ViewBag.Message = "Parola güncelleme işlemi başarılı";
+                return RedirectToAction(nameof(Logout));
             }
             else
             {
                 ViewBag.Message = $"Bir hata oluştu: {ModelState.ToFullErrorString()}";
             }
 
-            return RedirectToAction("Profile");
+            return RedirectToAction(nameof(Profile));
         }
     }
 }
