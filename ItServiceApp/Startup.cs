@@ -59,7 +59,10 @@ namespace ItServiceApp
                 options.SlidingExpiration = true;
             });
 
-            services.AddTransient<IEmailSender, EmailSender>();
+            //services.AddScoped<IyzicoPaymentService>();
+            services.AddTransient<IEmailSender, EmailSender>(); //loose coupling
+            services.AddScoped<IPaymentService, IyzicoPaymentService>(); //loose coupling
+            //services.AddScoped<IPaymentService, GarantiPaymentService>(); //loose coupling
             services.AddAutoMapper(options =>
             {
                 //options.AddProfile<PaymentProfile>();
