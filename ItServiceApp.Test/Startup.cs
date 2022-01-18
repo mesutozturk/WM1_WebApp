@@ -7,7 +7,7 @@ namespace ItServiceApp.Test
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IPaymentService, IyzicoPaymentService>();
+            services.AddScoped<IPaymentService, IyzicoPaymentService>();
         }
     }
 }
