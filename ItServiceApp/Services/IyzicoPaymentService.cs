@@ -14,10 +14,9 @@ namespace ItServiceApp.Services
         private readonly IyzicoPaymentOptions _options;
         private readonly IMapper _mapper;
 
-        public IyzicoPaymentService(IConfiguration configuration, IyzicoPaymentOptions options, IMapper mapper)
+        public IyzicoPaymentService(IConfiguration configuration, IMapper mapper)
         {
             _configuration = configuration;
-            _options = options;
             _mapper = mapper;
             var section = _configuration.GetSection(IyzicoPaymentOptions.Key);
             _options = new IyzicoPaymentOptions()
@@ -66,7 +65,7 @@ namespace ItServiceApp.Services
 
         public PaymentResponseModel Pay(PaymentModel model)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
     }
 }
