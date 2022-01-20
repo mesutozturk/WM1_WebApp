@@ -5,10 +5,12 @@ using ItServiceApp.Extensions;
 using ItServiceApp.Models.Payment;
 using ItServiceApp.Services;
 using ItServiceApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ItServiceApp.Controllers
 {
+    [Authorize]
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
@@ -58,9 +60,7 @@ namespace ItServiceApp.Controllers
                 installmentInfo.InstallmentPrices.FirstOrDefault(x => x.InstallmentNumber == model.Installment);
 
             paymentModel.PaidPrice = decimal.Parse(installmentNumber != null ? installmentNumber.TotalPrice.Replace('.', ',') : installmentInfo.InstallmentPrices[0].TotalPrice.Replace('.', ','));
-
-            //legacy code
-
+            
             var result = _paymentService.Pay(paymentModel);
             return View();
         }
