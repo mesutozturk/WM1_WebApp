@@ -15,6 +15,7 @@ namespace ItServiceApp.MapperProfiles
             CreateMap<InstallmentPriceModel, InstallmentPrice>().ReverseMap();
             CreateMap<InstallmentModel, InstallmentDetail>().ReverseMap();
             CreateMap<PaymentResponseModel, Payment>().ReverseMap();
+            
         }
     }
 }

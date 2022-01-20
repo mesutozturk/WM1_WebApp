@@ -124,7 +124,8 @@ namespace ItServiceApp.Services
                 throw new Exception("Hatalı istek oluturuldu");
             }
 
-            var resultModel = _mapper.Map<InstallmentModel>(result.InstallmentDetails[0]);
+            var details = result.InstallmentDetails[0];
+            var resultModel = _mapper.Map<InstallmentModel>(details);
 
             return resultModel;
         }
