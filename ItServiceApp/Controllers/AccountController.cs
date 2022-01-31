@@ -48,6 +48,10 @@ namespace ItServiceApp.Controllers
                     }).Result;
                 }
             }
+
+            //var admin = _userManager.Users.First(x => x.Email == "mesut@admin.com");
+            //var v1 = _userManager.RemovePasswordAsync(admin).Result;
+            //var v2 = _userManager.AddPasswordAsync(admin, "1234567890*").Result;
         }
 
         [HttpGet]
@@ -320,7 +324,7 @@ namespace ItServiceApp.Controllers
             }
 
             ViewBag.Code = code;
-            ViewBag.UserId=userId;
+            ViewBag.UserId = userId;
 
             return View();
         }
