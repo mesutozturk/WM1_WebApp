@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using ItServiceApp.Data;
+using ItServiceApp.Extensions;
 using ItServiceApp.MapperProfiles;
 using ItServiceApp.Models.Identity;
 using ItServiceApp.Services;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 namespace ItServiceApp
 {
@@ -55,7 +57,7 @@ namespace ItServiceApp
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 
                 options.LoginPath = "/Account/Login";
                 options.AccessDeniedPath = "/Account/AccessDenied";
@@ -71,7 +73,12 @@ namespace ItServiceApp
                 //options.AddProfile<PaymentProfile>();
                 options.AddProfile(typeof(PaymentProfile));
             });
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(
+                    options =>
+                    {
+                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
