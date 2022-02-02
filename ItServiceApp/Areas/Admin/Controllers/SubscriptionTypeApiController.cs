@@ -8,6 +8,7 @@ using ItServiceApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace ItServiceApp.Areas.Admin.Controllers
@@ -27,7 +28,8 @@ namespace ItServiceApp.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            var data = _dbContext.SubscriptionTypes;
+            var data = _dbContext.SubscriptionTypes
+                .Include(x => x.Subscriptions);
 
             return Ok(DataSourceLoader.Load(data, loadOptions));
         }

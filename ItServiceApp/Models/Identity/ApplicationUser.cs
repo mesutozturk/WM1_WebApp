@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ItServiceApp.Models.Entities;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ItServiceApp.Models.Entities;
-using Microsoft.AspNetCore.Identity;
 
 namespace ItServiceApp.Models.Identity
 {
