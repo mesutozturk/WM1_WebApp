@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using ItServiceApp.Data;
-using ItServiceApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ItServiceApp.Controllers
@@ -20,11 +17,11 @@ namespace ItServiceApp.Controllers
 
         public IActionResult Index()
         {
-            var model = _dbContext.SubscriptionTypes
-                .OrderBy(x => x.Price)
-                .ToList()
-                .Select(x => _mapper.Map<SubscriptionTypeViewModel>(x))
-                .ToList();
+            //var model = _dbContext.SubscriptionTypes
+            //    .OrderBy(x => x.Price)
+            //    .ToList()
+            //    .Select(x => _mapper.Map<SubscriptionTypeViewModel>(x))
+            //    .ToList();
 
 
             //var data = new List<SubscriptionTypeViewModel>();
@@ -39,7 +36,7 @@ namespace ItServiceApp.Controllers
             //    data.Add(dataItem);
             //}
 
-            return View(model);
+            return View();
         }
     }
 }
