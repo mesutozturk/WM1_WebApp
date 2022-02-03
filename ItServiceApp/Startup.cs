@@ -70,9 +70,10 @@ namespace ItServiceApp
             //services.AddScoped<IPaymentService, GarantiPaymentService>(); //loose coupling
             services.AddAutoMapper(options =>
             {
-                //options.AddProfile<PaymentProfile>();
                 options.AddProfile(typeof(PaymentProfile));
+                options.AddProfile<EntityProfile>();
             });
+
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(
                     options =>
