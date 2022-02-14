@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ItServiceApp.Business.Services.Payment;
+using ItServiceApp.Core.Payment;
+using ItServiceApp.Core.ViewModels;
 using ItServiceApp.Extensions;
-using ItServiceApp.Models.Payment;
-using ItServiceApp.Services;
-using ItServiceApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ItServiceApp.Controllers
 {
